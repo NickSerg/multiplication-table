@@ -6,9 +6,7 @@ import NavigationBar from 'react-native-navbar';
 export default function App() {
   return (
     <View style={styles.container}>
-      <NavigationBar
-        title={titleConfig}
-      />
+      <NavigationBar title={titleConfig} style={styles.navigationBar}/>
       <Training></Training>
     </View>
   );
@@ -16,10 +14,14 @@ export default function App() {
 
 const titleConfig = {
   title: 'Training',
+  tintColor: '#FFFFFF'
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  navigationBar: {
+    backgroundColor: "#1E90FF"
+  }
 });

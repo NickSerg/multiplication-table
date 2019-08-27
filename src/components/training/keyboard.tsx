@@ -5,23 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface IProps {
     onPress: (value: string) => void,
-    onSubmit: (value: number) => void
+    onSubmit: () => void,
+    allowSubmit: boolean
 }
 
-interface IState {
-    text: string
-}
-
-export default class Keyboard extends Component<IProps, IState> {
+export default class Keyboard extends Component<IProps> {
     static propTypes = {
-        onPress: PropTypes.func.isRequired
+        onPress: PropTypes.func.isRequired,
+        allowSubmit: PropTypes.bool 
     }
 
-    constructor(props: any) {
+    constructor(props: IProps) {
         super(props);
-        this.state = {
-            text: '',
-        };
     }
 
     renderRow(numbersArray: number[]) {
@@ -51,26 +46,19 @@ export default class Keyboard extends Component<IProps, IState> {
 
     renderDone() {
         return (
-            <TouchableOpacity accessibilityLabel='done' style={[this.state.text.length > 0 ? styles.cell : styles.inactiveCell, styles.done]} onPress={() => { this.onSubmit() }} disabled={this.state.text.length === 0}>
+            <TouchableOpacity accessibilityLabel='done' style={[this.props.allowSubmit? styles.cell : styles.inactiveCell, styles.done]} onPress={() => { this.onSubmit() }} disabled={!this.props.allowSubmit}>
                 <Ionicons name="md-return-left" color={styles.number.color} size={styles.number.fontSize} />
             </TouchableOpacity>
         );
     }
 
-    onPress(val: string) {
-        let curText = this.state.text;
-        if (val === 'back') {
-            curText = curText.slice(0, -1);
-        } else {
-            curText += val;
-        }
-        this.setState({ text: curText });
-        this.props.onPress(curText);
+    onPress(value: string) {
+        this.props.onPress(value);
     }
 
     onSubmit() {
-        this.props.onSubmit(Number.parseInt(this.state.text));
-        this.setState({text: ''});
+        this.props.onSubmit();
+        this.setState({ text: '' });
     }
 
     render() {
@@ -92,8 +80,7 @@ export default class Keyboard extends Component<IProps, IState> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'space-between',
-        margin: 10
+        justifyContent: 'space-between'
     },
     row: {
         flex: 1,
